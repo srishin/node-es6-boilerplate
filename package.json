@@ -1,0 +1,54 @@
+{
+  "name": "node-app-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint src",
+    "apis": "apidoc -i src/api/v1/ -o apidoc/",
+    "start": "nodemon --ignore /dist/* ./dist/bin/www",
+    "build": "babel src  -D -d dist --presets es2015,stage-0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apidoc": "^0.16.1",
+    "body-parser": "^1.15.2",
+    "debug": "^2.6.0",
+    "express": "^4.14.0",
+    "mysql": "^2.12.0",
+    "nodemon": "^1.11.0",
+    "sequelize": "^3.28.0",
+    "serve-favicon": "^2.3.2"
+  },
+  "apidoc": {
+    "name": "Node Back End",
+    "version": "1.0.0",
+    "description": "Node Api documentation",
+    "url": "http://localhost:3000/api/v1"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "allowImportExportEverywhere": true,
+      "sourceType": "module",
+      "env": {
+        "node": true
+      },
+      "rules": {
+        "no-console": 0,
+        "no-unused-vars": 1
+      }
+    }
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "eslint": "^3.12.2",
+    "eslint-config-airbnb-base": "^11.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "shelljs": "^0.7.5"
+  }
+}

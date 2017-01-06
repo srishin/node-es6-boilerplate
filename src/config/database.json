@@ -1,0 +1,16 @@
+{
+    "development": {
+        "driver": "mysql",
+        "username": "root",
+        "database": "add-app",
+        "password": "root",
+        "location": "localhost"
+    },
+    "production" : {
+        "driver": "mysql",
+        "username": "root",
+        "database": "add-app",
+        "password": "",
+        "location": "localhost"
+    }
+}

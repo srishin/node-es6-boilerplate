@@ -1,8 +1,9 @@
 import express from 'express';
+import md5 from 'md5';
 import models from '../../models/index.js';
 
 let router = express.Router();
-const updateInfo = {status:[404,200],status_text:['Record not found','Update success']}
+const updateInfo = { status: [404, 200], status_text: ['Record not found', 'Update success'] };
 /**
  * @api {get} /user Get all user information
  * @apiVersion 1.0.0
@@ -24,7 +25,7 @@ const updateInfo = {status:[404,200],status_text:['Record not found','Update suc
 
 router.get('/', (req, res) => {
     let promise = models.user.findAll({
-        attributes:['id','name','phone','email','type']
+        attributes: ['id', 'name', 'phone', 'email', 'type']
     });
     promise.then((userList) => {
         if (!userList.length) {
@@ -41,6 +42,7 @@ router.get('/', (req, res) => {
 @apiParam {String} name name of the user
 @apiParam {Number} phone phone number of the user
 @apiParam {String} email Email Id of the user
+@apiParam {String} [password] Password for user
    @apiParamExample {json} Request-Example:
    {
     "name": "user name",
@@ -58,12 +60,15 @@ router.get('/', (req, res) => {
  */
 
 router.post('/', (req, res) => {
+    if (req.body.password) {
+        req.body.password = md5(req.body.password);
+    }
     let promise = models.user.create(req.body);
     promise.then((userData) => {
-        return res.json({email:userData.email});
+        return res.json({ email: userData.email });
     });
-    promise.catch((error)=>{
-      return res.status(500).json({error:error.errors[0].message});
+    promise.catch((error) => {
+        return res.status(500).json({ error: error.errors[0].message });
     });
 });
 
@@ -84,7 +89,7 @@ router.post('/', (req, res) => {
     "phone": 9456231453,
      "email":"user@email.com"
   }
-*   @apiSuccessExample Success-Response:
+  @apiSuccessExample Success-Response:
    HTTP/1.1 200 OK
    {
   "status": 200,
@@ -96,21 +101,21 @@ router.post('/', (req, res) => {
  */
 
 router.put('/', (req, res) => {
-   if(!req.body.id){
-     return res.status(422).json({error:'Unprocessable Entity'});
-   }
-    let promise = models.user.update(req.body,{
-      where:{id:req.body.id}
+    if (!req.body.id) {
+        return res.status(422).json({ error: 'Unprocessable Entity' });
+    }
+    let promise = models.user.update(req.body, {
+        where: { id: req.body.id }
     });
     promise.then((update) => {
-      console.log(update);
+        console.log(update);
         return res.json({
-          status:updateInfo.status[update[0]],
-          status_text:updateInfo.status_text[update[0]]
+            status: updateInfo.status[update[0]],
+            status_text: updateInfo.status_text[update[0]]
         });
     });
-    promise.catch((error)=>{
-      return res.status(500).json({error:error.errors[0].message});
+    promise.catch((error) => {
+        return res.status(500).json({ error: error.errors[0].message });
     });
 });
 

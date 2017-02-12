@@ -9,6 +9,10 @@ npm install
 ```
 * Install mysql
 * Create and specify database in src/config/database.json   
+* Globally install nodemon to run app
+```
+npm install -g nodemon
+```
 * To run the project
 ```
 npm start

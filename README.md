@@ -21,9 +21,21 @@ npm start
 ```
 npm run-script apis
 ````
-then open apidoc/index.html for viewing apis and params
+  then open apidoc/index.html for viewing apis and params
+* Build project
+```
+npm run-script build
+```
 
-## This project uses
+
+### Test 
+ We use airbnb style. To test conding style use
+ ```sh
+ npm run-script test
+ ```
+ 
+
+### Built With
 * [Express](http://expressjs.com/)
 * [Sequelize](http://docs.sequelizejs.com/en/v3/)
 * [Eslint](http://eslint.org/)

@@ -1,11 +1,11 @@
-import express from 'express';
-import path from 'path';
+const express = require('express'),
+    path = require('path'),
+    bodyParser = require('body-parser'),
+    models = require('./models');
 
 // import favicon from 'serve-favicon';
 // var logger = require('morgan');
 // var cookieParser = require('cookie-parser');
-import bodyParser from 'body-parser';
-import models from './models';
 
 const app = express();
 // var mqConn = require('./mq');

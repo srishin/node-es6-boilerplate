@@ -1,8 +1,8 @@
-import express from 'express';
-import md5 from 'md5';
-import jwt from 'jsonwebtoken';
-import models from '../../models/index';
-import config from '../../config/config.json';
+const express = require('express'),
+    md5 = require('md5'),
+    jwt = require('jsonwebtoken'),
+    models = require('../../models/index'),
+    config = require('../../config/config.json');
 
 const router = express.Router();
 
@@ -29,7 +29,7 @@ HTTP/1.1 200 OK
     @apiErrorExample Error-Response:
 HTTP/1.1 404 Not Found
 {
-	"error": "Invalid credentails"
+  "error": "Invalid credentails"
 }
  */
 

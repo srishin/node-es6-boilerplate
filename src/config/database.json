@@ -2,11 +2,11 @@
     "development": {
         "driver": "mysql",
         "username": "root",
-        "database": "add-app",
+        "database": "node_app",
         "password": "root",
         "location": "localhost"
     },
-    "production" : {
+    "production": {
         "driver": "mysql",
         "username": "root",
         "database": "add-app",

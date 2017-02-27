@@ -1,6 +1,6 @@
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import config from '../config/config.json';
+const express = require('express'),
+    jwt = require('jsonwebtoken'),
+    config = require('../config/config.json');
 
 let router = express.Router();
 

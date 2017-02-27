@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs'),
+    path = require('path');
 
 const db = {};
 const Sequelize = require('sequelize');
@@ -15,7 +15,7 @@ const sequelize = new Sequelize(
         host: config.location,
         dialect: config.driver,
         logging: false,
-    },
+    }
 );
 
 fs.readdirSync(__dirname)

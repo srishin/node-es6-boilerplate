@@ -120,4 +120,50 @@
  });
 
 
+  /**
+  *  @api {put} /user Delete user
+  *  @apiVersion 1.0.0
+  *   @apiName DeleteUser
+  *   @apiGroup User
+  @apiParam {Number} id id of the user
+     @apiParamExample {json} Request-Example:
+     {
+     "id": 1
+    }
+    @apiSuccessExample Success-Response:
+     HTTP/1.1 200 OK
+     {
+    "status_text": "Delete success"
+  }
+      @apiErrorExample Error-Response:
+      HTTP/1.1 404 Not Found
+       {
+       "error": "Failed"
+     }
+   */
+
+  router.delete('/', (req, res) => {
+      if (!req.body.id) {
+          return res.status(422).json({ error: 'Unprocessable Entity' });
+      }
+      let promise = models.user.destroy({
+          where: { id: req.body.id }
+      });
+      promise.then((delstatus) => {
+          console.log(delstatus);
+          if(delstatus){
+          return res.status(200).json({
+              status_text: 'Deleted Succefully'
+          });
+        }
+        return res.status(404).json({
+            error: 'Failed'
+        });
+      });
+      promise.catch((error) => {
+          return res.status(500).json({ error: error.errors[0].message });
+      });
+  });
+
+
  module.exports = router;

@@ -5,6 +5,7 @@ const express = require('express'),
 let router = express.Router();
 
 router.use(function(req, res, next) {
+    'use strict';
     var token = req.headers['x-auth-token'];
     console.log('Validating', token);
     if (token) {
@@ -20,6 +21,8 @@ router.use(function(req, res, next) {
                 "error": "Invalid token/Key"
             });
         }
+    } else if (req.baseUrl.indexOf('user') > 0 && req.method === 'POST') {
+        return next();
     } else {
         res.status(401);
         res.json({

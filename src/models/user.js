@@ -1,5 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
+    'use strict';
     return sequelize.define('user', {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
         name: {
             type: DataTypes.STRING
         },
@@ -27,10 +33,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING
         }
     }, {
-        paranoid: true,
-        underscored: true,
         freezeTableName: true,
-        classMethods: {
-        },
+        classMethods: {},
     });
 };

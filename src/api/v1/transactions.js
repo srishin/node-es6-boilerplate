@@ -13,10 +13,13 @@ const updateInfo = { status: [404, 200], status_text: ['Record not found', 'Upda
   HTTP/1.1 200 OK
  [{
     "id": 1,
-    "name": "Test",
-    "phone": 9598662623,
-    "email": "test@sensomate.com",
-    "type": 2
+    "account": "Bank Name",
+    "type": "DEBIT",
+    "amount": 500,
+    "towards": "Food Stall",
+    "purpose": "Dinner Bill",
+    "medium": "Debit Card",
+    "date" : "2017-03-01"
 }]
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Not Found
@@ -25,34 +28,39 @@ const updateInfo = { status: [404, 200], status_text: ['Record not found', 'Upda
 
 router.get('/', (req, res) => {
     let promise = models.transactions.findAll({
-        // attributes: ['id', 'name', 'phone', 'email', 'type']
+      where: { userId: req.body.userId },
+      attributes: ['id', 'account', 'type', 'amount', 'towards', 'purpose', 'medium', 'date']
     });
-    promise.then((userList) => {
-        if (!userList.length) {
-            res.status(404);
-        }
-        return res.json(userList);
-    });
+  promise.then((transactionList) => {
+    if (!transactionList.length) {
+      res.status(404);
+    }
+    return res.json(transactionList);
+  });
 });
 /**
 *  @api {post} /user Add new transaction
 *  @apiVersion 1.0.0
 *   @apiName AddTransaction
 *   @apiGroup Transactions
-@apiParam {String} name name of the user
-@apiParam {Number} phone phone number of the user
-@apiParam {String} email Email Id of the user
-@apiParam {String} [password] Password for user
+@apiParam {String} account name of the bank
+@apiParam {Number} DEBIT(0)/CREDIT(1)/LOAN(2)
+@apiParam {Number} amount transaction amount
+@apiParam {String} [towards] reciever
+@apiParam {String} [purpose] purpose of transaction
+@apiParam {String} [medium] medium of payment
+@apiParam {String} date transaction date
    @apiParamExample {json} Request-Example:
    {
-    "name": "user name",
-    "phone": 9456231453,
-     "email":"user@email.com"
+    "account" : "Bank name",
+    "type" : 1,
+    "amount" : 500,
+    "date" : "2017-03-01"
   }
 *   @apiSuccessExample Success-Response:
    HTTP/1.1 200 OK
    {
-     "email": "user@email.com"
+     "status_text": "Transaction success"
    }
     @apiErrorExample Error-Response:
     HTTP/1.1 404 Not Found
@@ -63,20 +71,20 @@ router.post('/', (req, res) => {
 
     let promise = models.transactions.create(req.body);
     promise.then((userData) => {
-        return res.json({ email: userData.email });
+        return res.status(200).json({ status_text: "Transaction success" });
     });
     promise.catch((error) => {
-        return res.status(500).json({ error: error.errors[0].message });
+        return res.status(404).json({ error: error.errors[0].message });
     });
 });
 
 
 /**
-*  @api {put} /user Update user
+*  @api {put} /user Update Transaction
 *  @apiVersion 1.0.0
-*   @apiName UpdateUser
-*   @apiGroup User
-@apiParam {Number} id id of the user
+*   @apiName UpdateTransaction
+*   @apiGroup Transactions
+@apiParam {Number} id transaction id
 @apiParam {String} [name] name of the user
 @apiParam {Number} [phone] phone number of the user
 @apiParam {String} [email] Email Id of the user

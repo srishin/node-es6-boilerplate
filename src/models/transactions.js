@@ -20,10 +20,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING
         },
         purpose: {
-            type: DataTypes.BIGINT
+            type: DataTypes.STRING
         },
         medium: {
-            type: DataTypes.INTEGER
+            type: DataTypes.ENUM,
+            values: ['Debit/Visa Card', 'Credit Card', 'Net Banking', 'Wallets', 'Other']
         },
         date: {
             type: DataTypes.DATE

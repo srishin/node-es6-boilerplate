@@ -3,7 +3,7 @@
      models = require('../../models/index.js');
 
  let router = express.Router();
- const updateInfo = { status: [404, 200], status_text: ['Record not found', 'Update success'] };
+ const updateInfo = { status: [404, 200], statusText: ['Record not found', 'Update success'] };
  /**
   * @api {get} /user Get all user information
   * @apiVersion 1.0.0
@@ -93,7 +93,7 @@
     HTTP/1.1 200 OK
     {
    "status": 200,
-   "status_text": "Update success"
+   "statusText": "Update success"
  }
      @apiErrorExample Error-Response:
      HTTP/1.1 404 Not Found
@@ -111,7 +111,7 @@
          console.log(update);
          return res.json({
              status: updateInfo.status[update[0]],
-             status_text: updateInfo.status_text[update[0]]
+             statusText: updateInfo.statusText[update[0]]
          });
      });
      promise.catch((error) => {
@@ -121,7 +121,7 @@
 
 
   /**
-  *  @api {put} /user Delete user
+  *  @api {delete} /user Delete user
   *  @apiVersion 1.0.0
   *   @apiName DeleteUser
   *   @apiGroup User
@@ -133,7 +133,7 @@
     @apiSuccessExample Success-Response:
      HTTP/1.1 200 OK
      {
-        "status_text": "Delete success"
+        "statusText": "Delete success"
      }
       @apiErrorExample Error-Response:
       HTTP/1.1 404 Not Found
@@ -153,7 +153,7 @@
           console.log(delstatus);
           if(delstatus){
           return res.status(200).json({
-              status_text: 'Deleted Succefully'
+              statusText: 'Deleted Succefully'
           });
         }
         return res.status(404).json({

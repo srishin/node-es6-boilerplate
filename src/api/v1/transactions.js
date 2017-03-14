@@ -3,9 +3,9 @@ const express = require('express'),
     models = require('../../models/index.js');
 
 let router = express.Router();
-const updateInfo = { status: [404, 200], status_text: ['Record not found', 'Update success'] };
+const updateInfo = { status: [404, 200], statusText: ['Record not found', 'Update success'] };
 /**
- * @api {get} /user Get all transactions by a user
+ * @api {get} /transactions Get all transactions by a user
  * @apiVersion 1.0.0
  * @apiName ListAllTransactions
  * @apiGroup Transactions
@@ -39,16 +39,16 @@ router.get('/', (req, res) => {
   });
 });
 /**
-*  @api {post} /user Add new transaction
+*  @api {post} /transactions Add new transaction
 *  @apiVersion 1.0.0
 *   @apiName AddTransaction
 *   @apiGroup Transactions
 @apiParam {String} account name of the bank
-@apiParam {Number} DEBIT(0)/CREDIT(1)/LOAN(2)
+@apiParam {Number} type DEBIT(1)/CREDIT(2)/LOAN(3)
 @apiParam {Number} amount transaction amount
 @apiParam {String} [towards] reciever
 @apiParam {String} [purpose] purpose of transaction
-@apiParam {String} [medium] medium of payment
+@apiParam {Number} [medium] medium of payment (Debit/Visa Card(1), Credit Card(2), Net Banking(3), Wallets(4), Other(5))
 @apiParam {String} date transaction date
    @apiParamExample {json} Request-Example:
    {
@@ -60,7 +60,7 @@ router.get('/', (req, res) => {
 *   @apiSuccessExample Success-Response:
    HTTP/1.1 200 OK
    {
-     "status_text": "Transaction success"
+     "statusText": "Transaction success"
    }
     @apiErrorExample Error-Response:
     HTTP/1.1 404 Not Found
@@ -71,7 +71,7 @@ router.post('/', (req, res) => {
 
     let promise = models.transactions.create(req.body);
     promise.then((userData) => {
-        return res.status(200).json({ status_text: "Transaction success" });
+        return res.status(200).json({ statusText: "Transaction success" });
     });
     promise.catch((error) => {
         return res.status(404).json({ error: error.errors[0].message });
@@ -80,32 +80,38 @@ router.post('/', (req, res) => {
 
 
 /**
-*  @api {put} /user Update Transaction
+*  @api {put} /transactions Update Transaction
 *  @apiVersion 1.0.0
 *   @apiName UpdateTransaction
 *   @apiGroup Transactions
 @apiParam {Number} id transaction id
-@apiParam {String} [name] name of the user
-@apiParam {Number} [phone] phone number of the user
-@apiParam {String} [email] Email Id of the user
+@apiParam {String} account name of the bank
+@apiParam {Number} type DEBIT(1)/CREDIT(2)/LOAN(3)
+@apiParam {Number} amount transaction amount
+@apiParam {String} [towards] reciever
+@apiParam {String} [purpose] purpose of transaction
+@apiParam {Number} [medium] medium of payment (Debit/Visa Card(1), Credit Card(2), Net Banking(3), Wallets(4), Other(5))
+@apiParam {String} date transaction date
    @apiParamExample {json} Request-Example:
    {
-   "id": 1,
-    "name": "user name",
-    "phone": 9456231453,
-     "email":"user@email.com"
+    "id" : 1,
+    "account" : "Bank name",
+    "type" : 1,
+    "amount" : 500,
+    "date" : "2017-03-01"
   }
-  @apiSuccessExample Success-Response:
+*   @apiSuccessExample Success-Response:
    HTTP/1.1 200 OK
    {
-  "status": 200,
-  "status_text": "Update success"
-}
+     "status" : 200,
+     "statusText": "Update success"
+   }
     @apiErrorExample Error-Response:
-    HTTP/1.1 404 Not Found
-     []
+    HTTP/1.1 500 Not Found
+    {
+      "error": "Update Failed"
+    }
  */
-
 router.put('/', (req, res) => {
     if (!req.body.id) {
         return res.status(422).json({ error: 'Unprocessable Entity' });
@@ -117,13 +123,59 @@ router.put('/', (req, res) => {
         console.log(update);
         return res.json({
             status: updateInfo.status[update[0]],
-            status_text: updateInfo.status_text[update[0]]
+            statusText: updateInfo.statusText[update[0]]
         });
     });
     promise.catch((error) => {
-        return res.status(500).json({ error: error.errors[0].message });
+        return res.status(500).json({ error: "Update Failed" });
     });
 });
+
+
+  /**
+  *  @api {delete} /transactions Delete Transaction
+  *  @apiVersion 1.0.0
+  *   @apiName DeleteTransaction
+  *   @apiGroup Transactions
+  @apiParam {Number} id transaction id
+     @apiParamExample {json} Request-Example:
+     {
+        "id": 1
+     }
+    @apiSuccessExample Success-Response:
+     HTTP/1.1 200 OK
+     {
+        "statusText": "Delete success"
+     }
+      @apiErrorExample Error-Response:
+      HTTP/1.1 404 Not Found
+       {
+          "error": "Failed"
+       }
+   */
+
+  router.delete('/', (req, res) => {
+      if (!req.body.id) {
+          return res.status(422).json({ error: 'Unprocessable Entity' });
+      }
+      let promise = models.transactions.destroy({
+          where: { id: req.body.id }
+      });
+      promise.then((delstatus) => {
+          console.log(delstatus);
+          if(delstatus){
+          return res.status(200).json({
+              statusText: 'Deleted Succefully'
+          });
+        }
+        return res.status(404).json({
+            error: 'Failed'
+        });
+      });
+      promise.catch((error) => {
+          return res.status(500).json({ error: error.errors[0].message });
+      });
+  });
 
 
 module.exports = router;

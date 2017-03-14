@@ -128,18 +128,18 @@
   @apiParam {Number} id id of the user
      @apiParamExample {json} Request-Example:
      {
-     "id": 1
-    }
+        "id": 1
+     }
     @apiSuccessExample Success-Response:
      HTTP/1.1 200 OK
      {
-    "status_text": "Delete success"
-  }
+        "status_text": "Delete success"
+     }
       @apiErrorExample Error-Response:
       HTTP/1.1 404 Not Found
        {
-       "error": "Failed"
-     }
+          "error": "Failed"
+       }
    */
 
   router.delete('/', (req, res) => {

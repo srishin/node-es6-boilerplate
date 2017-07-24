@@ -34,6 +34,9 @@ HTTP/1.1 404 Not Found
  */
 
 router.post('/', (req, res) => {
+    if (!req.body.password) {
+        return res.status(422).send();
+    }
     let login = models.user.findOne({
         where: {
             $or: [{ name: req.body.email }, { email: req.body.email }],
@@ -47,12 +50,13 @@ router.post('/', (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'Invalid credentails' });
         }
+        console.log(user);
         user.accessToken = jwt.sign({ user: user, expiresIn: 60 * 60 * 7, algorithm: 'RS512' }, config.appSecret);
-        res.json(user);
+        return res.json(user);
     });
 
     login.catch(() => {
-        res.status(422).send();
+        return res.status(422).send();
     });
 
 });
